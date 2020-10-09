@@ -11,31 +11,35 @@ import android.widget.EditText;
 import static android.app.PendingIntent.getActivity;
 
 public class MainActivity extends AppCompatActivity {
-
     SharedPreferences prefs = null;
-    EditText typeField;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         String savedString = prefs.getString("emailAdd", "Default Value");
-        typeField = findViewById(R.id.enterEmailAddress);
+        EditText typeField = findViewById(R.id.enterEmailAddress);
         typeField.setText(savedString);
+
     }
+ /*   private void saveSharedPrefs(String stringToSave) {
+
+    }
+*/
     @Override
     protected void onPause() {
         super.onPause();
         prefs = getSharedPreferences("SavedPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        EditText typeField = findViewById(R.id.enterEmailAddress);
+        editor.putString("emailAdd", typeField.getText().toString());
+        editor.commit();
         Button loginButton = findViewById(R.id.loginButton);
+
         loginButton.setOnClickListener(bt -> saveSharedPrefs(typeField.getText().toString()));
     }
 
-    private void saveSharedPrefs(String stringToSave) {
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("emailAdd", stringToSave);
-        editor.commit();
-    }
 
-}
+
+
+
+    }
