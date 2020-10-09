@@ -21,20 +21,18 @@ public class MainActivity extends AppCompatActivity {
         typeField.setText(savedString);
 
     }
- /*   private void saveSharedPrefs(String stringToSave) {
-
+    private void saveSharedPrefs(String stringToSave) {
+        prefs = getSharedPreferences("SavedPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("emailAdd", stringToSave);
+        editor.commit();
     }
-*/
+
     @Override
     protected void onPause() {
         super.onPause();
-        prefs = getSharedPreferences("SavedPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        EditText typeField = findViewById(R.id.enterEmailAddress);
-        editor.putString("emailAdd", typeField.getText().toString());
-        editor.commit();
         Button loginButton = findViewById(R.id.loginButton);
-
+        EditText typeField = findViewById(R.id.enterEmailAddress);
         loginButton.setOnClickListener(bt -> saveSharedPrefs(typeField.getText().toString()));
     }
 
