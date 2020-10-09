@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Button loginButton = findViewById(R.id.loginButton);
         typeField = findViewById(R.id.enterEmailAddress);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("emailAdd", typeField.getText().toString());
