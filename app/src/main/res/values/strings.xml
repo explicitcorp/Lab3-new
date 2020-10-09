@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Lab3</string>
+    <string name="profile">Your Profile</string>
+    <string name="name">Enter you Name:</string>
+    <string name="Picture">Your Picture:</string>
+    <string name="takePic">Click the button above to take a picture!</string>
     <string name="email">What is your email address:</string>
     <string name="typeEmail">Type email here</string>
     <string name="password">Type your password:</string>
