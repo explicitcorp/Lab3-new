@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
         String savedString = prefs.getString("emailAdd", "Default Value");
         EditText typeField = findViewById(R.id.enterEmailAddress);
         typeField.setText(savedString);
-
     }
     private void saveSharedPrefs(String stringToSave) {
         prefs = getSharedPreferences("SavedPrefs", Context.MODE_PRIVATE);
@@ -32,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         Button loginButton = findViewById(R.id.loginButton);
-        EditText typeField = findViewById(R.id.enterEmailAddress);
-        loginButton.setOnClickListener(bt -> saveSharedPrefs(typeField.getText().toString()));
+        EditText typeField1 = findViewById(R.id.enterEmailAddress);
+        loginButton.setOnClickListener(bt -> saveSharedPrefs(typeField1.getText().toString()));
     }
 
 
