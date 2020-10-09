@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Lab3</string>
+    <string name="email">What is your email address:</string>
+    <string name="typeEmail">Type email here</string>
+    <string name="password">Type your password:</string>
+</resources>
