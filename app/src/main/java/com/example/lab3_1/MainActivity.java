@@ -22,9 +22,9 @@ public class MainActivity extends AppCompatActivity {
         EditText email = findViewById(R.id.enterEmailAddress);
         Button button = findViewById(R.id.loginButton);
         prefs = getSharedPreferences("SavedPrefs", Context.MODE_PRIVATE);
-        email.setText(prefs.getString("emailAdd", "Default"));;
+        email.setText(prefs.getString("emailAdd", "Enter Email Address"));;
         button.setOnClickListener(bt -> onPause());
-        
+
     }
 
     @Override
