@@ -3,6 +3,7 @@ package com.example.lab3_1;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -24,6 +25,12 @@ public class MainActivity extends AppCompatActivity {
         prefs = getSharedPreferences("SavedPrefs", Context.MODE_PRIVATE);
         email.setText(prefs.getString("emailAdd", "Enter Email Address"));;
         button.setOnClickListener(bt -> onPause());
+        Intent nextPage = new Intent(this, ProfileActivity.class);
+
+        button.setOnClickListener( click ->
+        {
+            startActivity(nextPage);
+        });
 
     }
 
@@ -35,9 +42,5 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("emailAdd", typeField.getText().toString());
         editor.commit();
     }
-
-
-
-
 
     }

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -20,10 +21,15 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         mImageButton = findViewById(R.id.takePhoto);
         mImageButton.setOnClickListener(tp -> dispatchTakePictureIntent() );
-        Log.e(ACTIVITY_NAME,"In function:"+ ACTIVITY_NAME);
+        Log.e(ACTIVITY_NAME,"In function:"+ "onCreate");
+        Log.e(ACTIVITY_NAME,"In function:"+ "onStart");
+        Log.e(ACTIVITY_NAME,"In function:"+ "onPause");
+        Log.e(ACTIVITY_NAME,"In function:"+ "onStop");
+        Log.e(ACTIVITY_NAME,"In function:"+ "onDestroy");
+        Log.e(ACTIVITY_NAME,"In function:"+ "onActivityResult");
 
+    }
 
-        }
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
