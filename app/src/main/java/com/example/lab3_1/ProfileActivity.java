@@ -22,14 +22,28 @@ public class ProfileActivity extends AppCompatActivity {
         mImageButton = findViewById(R.id.takePhoto);
         mImageButton.setOnClickListener(tp -> dispatchTakePictureIntent() );
         Log.e(ACTIVITY_NAME,"In function:"+ "onCreate");
-        Log.e(ACTIVITY_NAME,"In function:"+ "onStart");
-        Log.e(ACTIVITY_NAME,"In function:"+ "onPause");
-        Log.e(ACTIVITY_NAME,"In function:"+ "onStop");
-        Log.e(ACTIVITY_NAME,"In function:"+ "onDestroy");
-        Log.e(ACTIVITY_NAME,"In function:"+ "onActivityResult");
 
     }
 
+    protected void onStart(){
+        super.onStart();
+        Log.e(ACTIVITY_NAME,"In function:"+ "onStart");
+    }
+protected void onPause(){
+        super.onPause();
+    Log.e(ACTIVITY_NAME,"In function:"+ "onPause");
+
+}
+    protected void onStop(){
+        super.onStop();
+        Log.e(ACTIVITY_NAME,"In function:"+ "onStop");
+
+    }
+    protected void onDestroy(){
+        super.onDestroy();
+        Log.e(ACTIVITY_NAME,"In function:"+ "onDestroy");
+
+    }
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -43,6 +57,7 @@ public class ProfileActivity extends AppCompatActivity {
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             mImageButton.setImageBitmap(imageBitmap);
         }
+        Log.e(ACTIVITY_NAME,"In function:"+ "onActivityResult");
     }
 
 }
