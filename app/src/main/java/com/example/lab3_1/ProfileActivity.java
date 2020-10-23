@@ -24,7 +24,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         mImageButton = findViewById(R.id.takePhoto);
-        ImageButton messageButton = findViewById(R.id.Messages);
+        Button messageButton = findViewById(R.id.Messages);
         Intent nextPage = new Intent(this, MessageActivity.class);
         messageButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
