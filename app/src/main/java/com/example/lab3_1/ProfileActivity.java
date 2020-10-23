@@ -1,6 +1,3 @@
-
-
-
 package com.example.lab3_1;
 
         import androidx.appcompat.app.AppCompatActivity;
