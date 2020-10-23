@@ -7,4 +7,7 @@
     <string name="email">What is your email address:</string>
     <string name="typeEmail">Type email here</string>
     <string name="password">Type your password:</string>
+    <string name="send">Send</string>
+    <string name="receive">Receive</string>
+    <string name="type_here">Type Here</string>
 </resources>
