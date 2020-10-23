@@ -20,5 +20,5 @@
         android:layout_height="69dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@drawable/iconsend" />
 </androidx.constraintlayout.widget.ConstraintLayout>
