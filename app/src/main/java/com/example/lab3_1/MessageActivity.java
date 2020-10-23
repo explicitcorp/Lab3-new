@@ -15,58 +15,64 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MessageActivity extends AppCompatActivity {
-
-  //  EditText enteredText = findViewById(R.id.editTextMessage);
+public String displayText;
+    myListAdapter myListAdapter = new myListAdapter();
+    EditText enteredText ;
+    ArrayList<Object> messageDisplay = new ArrayList<>();
+   boolean sendSelection = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listview);
-   //     Button sButton = findViewById(R.id.sendButton);
-//       Button rButton = findViewById(R.id.receiveButton);
+        Button sButton = findViewById(R.id.sendButton);
+     Button rButton = findViewById(R.id.receiveButton);
+        messageDisplay = new ArrayList<>();
 
-     /*   sButton.setOnClickListener(click -> {
-messageDisplay.add(enteredText.getText().toString());
-myListAdapter.notifyDataSetChanged();
-
+        enteredText = findViewById(R.id.editTextMessage);
+        displayText = enteredText.getText().toString();
+        ListView myList = findViewById(R.id.listViewLayout);
+        myList.setAdapter( myListAdapter);
+       sButton.setOnClickListener(click -> {
+           messageDisplay.add(displayText);
+               myListAdapter.notifyDataSetChanged();
         });
-       // rButton.setOnClickListener(r -> receiveAction());
+   //     rButton.setOnClickListener(r -> receiveAction());
 
-*/
-    //    ListView myList = findViewById(R.id.listViewLayout);
-   //     myList.setAdapter( myListAdapter = new myListAdapter() );
+
 
     }
-/*
-    private void sendAction(){
-        sendSelection = true;
-        String sent = enteredText.getText().toString();
-        TextView sendText = findViewById(R.id.leftMessage);
-        sendText.setText(sent);
-        enteredText.getText().clear();
+
+  private void sendAction(){
+
+
     }
     private void receiveAction(){
-        receiveSelection = true;
+    //    receiveSelection = true;
         String sent = enteredText.getText().toString();
         TextView sendText = findViewById(R.id.rightMessage);
         sendText.setText(sent);
         enteredText.getText().clear();
     }
-*/
+
     public class myListAdapter extends BaseAdapter{
 
 
         @Override
         public int getCount() {
-            return 1;
+            return messageDisplay.size();
         }
 
         @Override
-        public Object getItem(int position) {
-            return position;
+        public String getItem(int position) {
+            return displayText;
         }
 
         @Override
@@ -79,6 +85,8 @@ myListAdapter.notifyDataSetChanged();
              LayoutInflater inflater = getLayoutInflater();
 
                  View newView = inflater.inflate(R.layout.rightmessage, parent ,false);
+            TextView display = newView.findViewById(R.id.rightMessage);
+            display.setText(getItem(position));
 
                  return newView;
 
