@@ -2,6 +2,7 @@
 package com.example.lab3_1;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +31,6 @@ public class MessageActivity extends AppCompatActivity {
     boolean sendSelection = false;
     boolean receiveSelection = false;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         messageDisplay = new ArrayList<>();
@@ -46,29 +46,31 @@ public class MessageActivity extends AppCompatActivity {
             displayText = enteredText.getText().toString();
             messageDisplay.add(new Message(displayText, true));
             myListAdapter.notifyDataSetChanged();
+            enteredText.getText().clear();
         });
         rButton.setOnClickListener(click -> {
             enteredText = findViewById(R.id.editTextMessage);
             displayText = enteredText.getText().toString();
             messageDisplay.add(new Message(displayText, false));
             myListAdapter.notifyDataSetChanged();
+            enteredText.getText().clear();
         });
         ListView myList = findViewById(R.id.listViewLayout);
         myList.setAdapter(myListAdapter);
+        myList.setOnItemLongClickListener((p,b,pos,id) -> {
 
-    }
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setMessage("Delete Message?")
+                    .setPositiveButton("Yes", (click, arg) -> {
+                        messageDisplay.remove(pos);
+                        myList.deferNotifyDataSetChanged();
+                    }).setNegativeButton("No", (click, arg) -> {
+            });
 
-    private void sendAction() {
 
 
-    }
+        });
 
-    private void receiveAction() {
-        //    receiveSelection = true;
-        String sent = enteredText.getText().toString();
-        TextView sendText = findViewById(R.id.rightMessage);
-        sendText.setText(sent);
-        enteredText.getText().clear();
     }
 
     public class myListAdapter extends BaseAdapter {
@@ -122,6 +124,7 @@ public class MessageActivity extends AppCompatActivity {
             this.message = message;
             this.sent = sent;
         }
+
 public String getMessage(){
     return message;
 }
