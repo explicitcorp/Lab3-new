@@ -23,48 +23,55 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MessageActivity extends AppCompatActivity {
-public String displayText;
+    public String displayText;
     myListAdapter myListAdapter = new myListAdapter();
-    EditText enteredText ;
-    ArrayList<String> messageDisplay;
-   boolean sendSelection = false;
+    EditText enteredText;
+    ArrayList<Message> messageDisplay;
+    boolean sendSelection = false;
+    boolean receiveSelection = false;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        messageDisplay   = new ArrayList<>();
+        messageDisplay = new ArrayList<>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listview);
+
         Button sButton = findViewById(R.id.sendButton);
-     Button rButton = findViewById(R.id.receiveButton);
+        Button rButton = findViewById(R.id.receiveButton);
 
 
-
-        ListView myList = findViewById(R.id.listViewLayout);
-        myList.setAdapter( myListAdapter);
-       sButton.setOnClickListener(click -> {
-           enteredText = findViewById(R.id.editTextMessage);
-           displayText = enteredText.getText().toString();
-           messageDisplay.add(displayText);
-               myListAdapter.notifyDataSetChanged();
+        sButton.setOnClickListener(click -> {
+            enteredText = findViewById(R.id.editTextMessage);
+            displayText = enteredText.getText().toString();
+            messageDisplay.add(new Message(displayText, true));
+            myListAdapter.notifyDataSetChanged();
         });
-   //     rButton.setOnClickListener(r -> receiveAction());
+        rButton.setOnClickListener(click -> {
+            enteredText = findViewById(R.id.editTextMessage);
+            displayText = enteredText.getText().toString();
+            messageDisplay.add(new Message(displayText, false));
+            myListAdapter.notifyDataSetChanged();
+        });
+        ListView myList = findViewById(R.id.listViewLayout);
+        myList.setAdapter(myListAdapter);
 
+    }
+
+    private void sendAction() {
 
 
     }
 
-  private void sendAction(){
-
-
-    }
-    private void receiveAction(){
-    //    receiveSelection = true;
+    private void receiveAction() {
+        //    receiveSelection = true;
         String sent = enteredText.getText().toString();
         TextView sendText = findViewById(R.id.rightMessage);
         sendText.setText(sent);
         enteredText.getText().clear();
     }
 
-    public class myListAdapter extends BaseAdapter{
+    public class myListAdapter extends BaseAdapter {
 
 
         @Override
@@ -74,7 +81,9 @@ public String displayText;
 
         @Override
         public String getItem(int position) {
-            return messageDisplay.get(position).toString();
+
+            return messageDisplay.get(position).message;
+
         }
 
         @Override
@@ -84,19 +93,44 @@ public String displayText;
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-             LayoutInflater inflater = getLayoutInflater();
+            LayoutInflater inflater = getLayoutInflater();
 
-                 View newView = inflater.inflate(R.layout.rightmessage, parent ,false);
-            TextView display = newView.findViewById(R.id.rightMessage);
-            ImageView displayImage = newView.findViewById(R.id.rightImage);
-            display.setText(getItem(position));
-
-                 return newView;
-
-
+            if (!messageDisplay.get(position).sent) {
+                View newView = inflater.inflate(R.layout.leftmessage, parent, false);
+                TextView display = newView.findViewById(R.id.leftMessage);
+                display.setText(getItem(position));
+                return newView;
+            }
+            if (messageDisplay.get(position).sent) {
+                View newView = inflater.inflate(R.layout.rightmessage, parent, false);
+                TextView display = newView.findViewById(R.id.rightMessage);
+                display.setText(getItem(position));
+                return newView;
+            }
+            return null;
         }
+
+
     }
 
+
+    public class Message {
+        private boolean sent;
+        private String message;
+
+        public Message(String message, boolean sent) {
+            this.message = message;
+            this.sent = sent;
+        }
+public String getMessage(){
+    return message;
 }
+ public boolean sent(){
+            return sent;
+ }
 
 
+    }
+
+
+}
