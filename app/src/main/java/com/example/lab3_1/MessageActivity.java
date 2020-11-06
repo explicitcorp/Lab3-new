@@ -57,18 +57,16 @@ public class MessageActivity extends AppCompatActivity {
         });
         ListView myList = findViewById(R.id.listViewLayout);
         myList.setAdapter(myListAdapter);
-        myList.setOnItemLongClickListener((p,b,pos,id) -> {
+        myList.setOnItemLongClickListener((parent,view,position,id) -> {
 
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-            alertDialog.setMessage("Delete Message?")
-                    .setPositiveButton("Yes", (click, arg) -> {
-                        messageDisplay.remove(pos);
-                        myList.deferNotifyDataSetChanged();
-                    }).setNegativeButton("No", (click, arg) -> {
-            });
-
-
-
+            alertDialog.setTitle("Are you sure?");
+            alertDialog.setMessage("Delete Message?");
+            alertDialog.setPositiveButton("Yes", (click, arg) -> { messageDisplay.remove(position); myListAdapter.notifyDataSetChanged();});
+            alertDialog.setNegativeButton("No", (click, arg) -> { });
+            alertDialog.create();
+            alertDialog.show();
+    return true;
         });
 
     }
