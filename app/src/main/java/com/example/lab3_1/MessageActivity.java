@@ -3,6 +3,8 @@ package com.example.lab3_1;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +32,9 @@ public class MessageActivity extends AppCompatActivity {
     ArrayList<Message> messageDisplay;
     boolean sendSelection = false;
     boolean receiveSelection = false;
+    ContentValues newRowValues = new ContentValues();
+    SQLiteDatabase db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +51,21 @@ public class MessageActivity extends AppCompatActivity {
             displayText = enteredText.getText().toString();
             messageDisplay.add(new Message(displayText, true));
             myListAdapter.notifyDataSetChanged();
+            newRowValues.put(MyOpener.COL_SEND, displayText);
+            long newId = db.insert(MyOpener.TABLE_NAME, null, newRowValues);
             enteredText.getText().clear();
+
+
         });
         rButton.setOnClickListener(click -> {
             enteredText = findViewById(R.id.editTextMessage);
             displayText = enteredText.getText().toString();
             messageDisplay.add(new Message(displayText, false));
             myListAdapter.notifyDataSetChanged();
+            newRowValues.put(MyOpener.COL_RECEIVE, displayText);
+            long newId = db.insert(MyOpener.TABLE_NAME, null, newRowValues);
             enteredText.getText().clear();
+
         });
         ListView myList = findViewById(R.id.listViewLayout);
         myList.setAdapter(myListAdapter);
