@@ -38,8 +38,6 @@ public class MessageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listview);
 
@@ -81,6 +79,8 @@ public class MessageActivity extends AppCompatActivity {
             alertDialog.setTitle("Are you sure?");
             alertDialog.setMessage("Delete Message?");
             alertDialog.setPositiveButton("Yes", (click, arg) -> {
+                MessageInfo selectedMessage = messageInfo.get(position);
+                deleteMessage(selectedMessage);
                 messageInfo.remove(position);
                 myListAdapter.notifyDataSetChanged();
             });
@@ -96,7 +96,6 @@ public class MessageActivity extends AppCompatActivity {
         //get a database connection:
         MyOpener dbOpener = new MyOpener(this);
         db = dbOpener.getWritableDatabase(); //This calls onCreate() if you've never built the table before, or onUpgrade if the version here is newer
-
 
         // We want to get all of the columns. Look at MyOpener.java for the definitions:
         String[] columns = {MyOpener.COL_ID, MyOpener.COL_MESSAGE, MyOpener.COL_SENT};
@@ -120,7 +119,10 @@ public class MessageActivity extends AppCompatActivity {
 
         //At this point, the contactsList array has loaded every row from the cursor.
     }
-
+    protected void deleteMessage(MessageInfo c)
+    {
+        db.delete(MyOpener.TABLE_NAME, MyOpener.COL_ID + "= ?", new String[] {Long.toString(c.getId())});
+    }
 
     public class myListAdapter extends BaseAdapter {
 
