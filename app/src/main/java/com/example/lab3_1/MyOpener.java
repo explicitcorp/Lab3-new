@@ -9,8 +9,7 @@ public class MyOpener extends SQLiteOpenHelper {
     protected final static String DATABASE_NAME = "ContactsDB";
     protected final static int VERSION_NUM = 1;
     public final static String TABLE_NAME = "CONTACTS";
-    public final static String COL_SEND = "EMAIL";
-    public final static String COL_RECEIVE = "NAME";
+    public final static String COL_MESSAGE = "EMAIL";
     public final static String COL_ID = "_id";
 
     public MyOpener(Context ctx)
@@ -25,8 +24,7 @@ public class MyOpener extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db)
     {
         db.execSQL("CREATE TABLE " + TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + COL_SEND  + " text,"
-                + COL_RECEIVE  + " text);");  // add or remove columns
+                + COL_MESSAGE  + " text);");  // add or remove columns
     }
 
 

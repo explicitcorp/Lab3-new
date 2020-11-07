@@ -4,6 +4,7 @@ package com.example.lab3_1;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,15 +30,16 @@ public class MessageActivity extends AppCompatActivity {
     public String displayText;
     myListAdapter myListAdapter = new myListAdapter();
     EditText enteredText;
-    ArrayList<Message> messageDisplay;
-    boolean sendSelection = false;
-    boolean receiveSelection = false;
+    ArrayList<MessageInfo> messageDisplay = new ArrayList<>();
+    ArrayList<MessageInfo> messageInfo = new ArrayList<>();
     ContentValues newRowValues = new ContentValues();
     SQLiteDatabase db;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         messageDisplay = new ArrayList<>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listview);
@@ -45,13 +47,16 @@ public class MessageActivity extends AppCompatActivity {
         Button sButton = findViewById(R.id.sendButton);
         Button rButton = findViewById(R.id.receiveButton);
 
+        loadDataFromDatabase();
 
         sButton.setOnClickListener(click -> {
             enteredText = findViewById(R.id.editTextMessage);
             displayText = enteredText.getText().toString();
-            messageDisplay.add(new Message(displayText, true));
+            MessageInfo info = new MessageInfo(displayText);
+            info.setSend(true);
+            messageDisplay.add(info);
             myListAdapter.notifyDataSetChanged();
-            newRowValues.put(MyOpener.COL_SEND, displayText);
+            newRowValues.put(MyOpener.COL_MESSAGE, displayText);
             long newId = db.insert(MyOpener.TABLE_NAME, null, newRowValues);
             enteredText.getText().clear();
 
@@ -60,28 +65,62 @@ public class MessageActivity extends AppCompatActivity {
         rButton.setOnClickListener(click -> {
             enteredText = findViewById(R.id.editTextMessage);
             displayText = enteredText.getText().toString();
-            messageDisplay.add(new Message(displayText, false));
+            MessageInfo info = new MessageInfo(displayText);
+            info.setSend(false);
+            messageDisplay.add(info);
             myListAdapter.notifyDataSetChanged();
-            newRowValues.put(MyOpener.COL_RECEIVE, displayText);
+            newRowValues.put(MyOpener.COL_MESSAGE, displayText);
             long newId = db.insert(MyOpener.TABLE_NAME, null, newRowValues);
             enteredText.getText().clear();
 
         });
         ListView myList = findViewById(R.id.listViewLayout);
         myList.setAdapter(myListAdapter);
-        myList.setOnItemLongClickListener((parent,view,position,id) -> {
+        myList.setOnItemLongClickListener((parent, view, position, id) -> {
 
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
             alertDialog.setTitle("Are you sure?");
             alertDialog.setMessage("Delete Message?");
-            alertDialog.setPositiveButton("Yes", (click, arg) -> { messageDisplay.remove(position); myListAdapter.notifyDataSetChanged();});
-            alertDialog.setNegativeButton("No", (click, arg) -> { });
+            alertDialog.setPositiveButton("Yes", (click, arg) -> {
+                messageDisplay.remove(position);
+                myListAdapter.notifyDataSetChanged();
+            });
+            alertDialog.setNegativeButton("No", (click, arg) -> {
+            });
             alertDialog.create();
             alertDialog.show();
-    return true;
+            return true;
         });
-
     }
+
+    private void loadDataFromDatabase() {
+        //get a database connection:
+        MyOpener dbOpener = new MyOpener(this);
+        db = dbOpener.getWritableDatabase(); //This calls onCreate() if you've never built the table before, or onUpgrade if the version here is newer
+
+
+        // We want to get all of the columns. Look at MyOpener.java for the definitions:
+        String[] columns = {MyOpener.COL_ID, MyOpener.COL_MESSAGE};
+        //query all the results from the database:
+        Cursor results = db.query(false, MyOpener.TABLE_NAME, columns, null, null, null, null, null, null);
+
+        //Now the results object has rows of results that match the query.
+        //find the column indices:
+        int messageColumnIndex = results.getColumnIndex(MyOpener.COL_MESSAGE);
+        int idColIndex = results.getColumnIndex(MyOpener.COL_ID);
+
+        //iterate over the results, return true if there is a next item:
+        while (results.moveToNext()) {
+            String message = results.getString(messageColumnIndex);
+            long id = results.getLong(idColIndex);
+
+            //add the new Contact to the array list:
+            messageInfo.add(new MessageInfo(message, id));
+        }
+
+        //At this point, the contactsList array has loaded every row from the cursor.
+    }
+
 
     public class myListAdapter extends BaseAdapter {
 
@@ -94,7 +133,7 @@ public class MessageActivity extends AppCompatActivity {
         @Override
         public String getItem(int position) {
 
-            return messageDisplay.get(position).message;
+            return messageDisplay.get(position).toString();
 
         }
 
@@ -107,13 +146,13 @@ public class MessageActivity extends AppCompatActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = getLayoutInflater();
 
-            if (!messageDisplay.get(position).sent) {
+            if (!messageDisplay.get(position).isSend()) {
                 View newView = inflater.inflate(R.layout.leftmessage, parent, false);
                 TextView display = newView.findViewById(R.id.leftMessage);
                 display.setText(getItem(position));
                 return newView;
             }
-            if (messageDisplay.get(position).sent) {
+            if (messageDisplay.get(position).isSend()) {
                 View newView = inflater.inflate(R.layout.rightmessage, parent, false);
                 TextView display = newView.findViewById(R.id.rightMessage);
                 display.setText(getItem(position));
