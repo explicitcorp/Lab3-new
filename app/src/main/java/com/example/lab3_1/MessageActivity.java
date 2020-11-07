@@ -99,7 +99,7 @@ public class MessageActivity extends AppCompatActivity {
 
 
         // We want to get all of the columns. Look at MyOpener.java for the definitions:
-        String[] columns = {MyOpener.COL_ID, MyOpener.COL_MESSAGE};
+        String[] columns = {MyOpener.COL_ID, MyOpener.COL_MESSAGE, MyOpener.COL_SENT};
         //query all the results from the database:
         Cursor results = db.query(false, MyOpener.TABLE_NAME, columns, null, null, null, null, null, null);
 
