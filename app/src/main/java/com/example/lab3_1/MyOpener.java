@@ -6,14 +6,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class MyOpener extends SQLiteOpenHelper {
 
-    protected final static String DATABASE_NAME = "ContactsDB";
+    protected final static String DATABASE_NAME = "MessagesDB";
     protected final static int VERSION_NUM = 1;
-    public final static String TABLE_NAME = "CONTACTS";
-    public final static String COL_MESSAGE = "EMAIL";
+    public final static String TABLE_NAME = "MESSAGETABLE";
+    public final static String COL_MESSAGE = "MESSAGE";
+    public final static String COL_SENT = "SENT";
     public final static String COL_ID = "_id";
 
-    public MyOpener(Context ctx)
-    {
+    public MyOpener(Context ctx) {
         super(ctx, DATABASE_NAME, null, VERSION_NUM);
     }
 
@@ -21,12 +21,12 @@ public class MyOpener extends SQLiteOpenHelper {
     //This function gets called if no database file exists.
     //Look on your device in the /data/data/package-name/database directory.
     @Override
-    public void onCreate(SQLiteDatabase db)
-    {
-        db.execSQL("CREATE TABLE " + TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + COL_MESSAGE  + " text);");  // add or remove columns
-    }
+    public void onCreate(SQLiteDatabase db) {
 
+        db.execSQL("CREATE TABLE "+TABLE_NAME +" (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+            +COL_MESSAGE +" text,"
+            +COL_SENT  +" text);");  // add or remove columns
+}
 
     //this function gets called if the database version on your device is lower than VERSION_NUM
     @Override

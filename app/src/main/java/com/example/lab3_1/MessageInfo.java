@@ -13,29 +13,36 @@ public class MessageInfo {
 
     protected String message;
     protected long id;
-    boolean send;
 
-    public boolean isSend() {
+    public int getSend() {
         return send;
     }
 
-    public void setSend(boolean send) {
+    public void setSend(int send) {
         this.send = send;
     }
+
+    int send;
+
+
 
 
 
     /**Constructor:*/
-    public MessageInfo(String m,  long i)
+    public MessageInfo(String m, int s,  long i)
     {
+
+        this(m,s);
         message = m;
         id = i;
+        send = s;
+
     }
 
-    public MessageInfo(String m)
+    public MessageInfo(String m, int s)
     {
-        this(m,0);
         message = m;
+        send = s;
     }
 
     public void update(String m)

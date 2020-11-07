@@ -3,6 +3,7 @@ package com.example.lab3_1;
         import androidx.appcompat.app.AppCompatActivity;
 
         import android.content.Intent;
+        import android.content.Intent;
         import android.graphics.Bitmap;
         import android.os.Bundle;
         import android.provider.MediaStore;
@@ -23,10 +24,10 @@ public class ProfileActivity extends AppCompatActivity {
         mImageButton = findViewById(R.id.takePhoto);
         Button messageButton = findViewById(R.id.Messages);
         Intent nextPage = new Intent(this, MessageActivity.class);
-        messageButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                startActivity(nextPage);
-            }
+        messageButton.setOnClickListener(v -> {
+
+            startActivity(nextPage);
+
         });
         mImageButton.setOnClickListener(tp -> dispatchTakePictureIntent() );
         Log.e(ACTIVITY_NAME,"In function:"+ "onCreate");

@@ -30,7 +30,6 @@ public class MessageActivity extends AppCompatActivity {
     public String displayText;
     myListAdapter myListAdapter = new myListAdapter();
     EditText enteredText;
-    ArrayList<MessageInfo> messageDisplay = new ArrayList<>();
     ArrayList<MessageInfo> messageInfo = new ArrayList<>();
     ContentValues newRowValues = new ContentValues();
     SQLiteDatabase db;
@@ -40,7 +39,7 @@ public class MessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
 
-        messageDisplay = new ArrayList<>();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listview);
 
@@ -52,11 +51,11 @@ public class MessageActivity extends AppCompatActivity {
         sButton.setOnClickListener(click -> {
             enteredText = findViewById(R.id.editTextMessage);
             displayText = enteredText.getText().toString();
-            MessageInfo info = new MessageInfo(displayText);
-            info.setSend(true);
-            messageDisplay.add(info);
+            MessageInfo info = new MessageInfo(displayText,1);
+            messageInfo.add(info);
             myListAdapter.notifyDataSetChanged();
             newRowValues.put(MyOpener.COL_MESSAGE, displayText);
+            newRowValues.put(MyOpener.COL_SENT, 1);
             long newId = db.insert(MyOpener.TABLE_NAME, null, newRowValues);
             enteredText.getText().clear();
 
@@ -65,11 +64,11 @@ public class MessageActivity extends AppCompatActivity {
         rButton.setOnClickListener(click -> {
             enteredText = findViewById(R.id.editTextMessage);
             displayText = enteredText.getText().toString();
-            MessageInfo info = new MessageInfo(displayText);
-            info.setSend(false);
-            messageDisplay.add(info);
+            MessageInfo info = new MessageInfo(displayText, 0);
+            messageInfo.add(info);
             myListAdapter.notifyDataSetChanged();
             newRowValues.put(MyOpener.COL_MESSAGE, displayText);
+            newRowValues.put(MyOpener.COL_SENT, 0);
             long newId = db.insert(MyOpener.TABLE_NAME, null, newRowValues);
             enteredText.getText().clear();
 
@@ -82,7 +81,7 @@ public class MessageActivity extends AppCompatActivity {
             alertDialog.setTitle("Are you sure?");
             alertDialog.setMessage("Delete Message?");
             alertDialog.setPositiveButton("Yes", (click, arg) -> {
-                messageDisplay.remove(position);
+                messageInfo.remove(position);
                 myListAdapter.notifyDataSetChanged();
             });
             alertDialog.setNegativeButton("No", (click, arg) -> {
@@ -108,14 +107,15 @@ public class MessageActivity extends AppCompatActivity {
         //find the column indices:
         int messageColumnIndex = results.getColumnIndex(MyOpener.COL_MESSAGE);
         int idColIndex = results.getColumnIndex(MyOpener.COL_ID);
-
+        int sentColIndex = results.getColumnIndex(MyOpener.COL_SENT);
         //iterate over the results, return true if there is a next item:
         while (results.moveToNext()) {
             String message = results.getString(messageColumnIndex);
             long id = results.getLong(idColIndex);
+            int sent = results.getInt(sentColIndex);
 
             //add the new Contact to the array list:
-            messageInfo.add(new MessageInfo(message, id));
+            messageInfo.add(new MessageInfo(message, sent,id));
         }
 
         //At this point, the contactsList array has loaded every row from the cursor.
@@ -127,13 +127,13 @@ public class MessageActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return messageDisplay.size();
+            return messageInfo.size();
         }
 
         @Override
-        public String getItem(int position) {
+        public MessageInfo getItem(int position) {
 
-            return messageDisplay.get(position).toString();
+            return messageInfo.get(position);
 
         }
 
@@ -146,43 +146,25 @@ public class MessageActivity extends AppCompatActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = getLayoutInflater();
 
-            if (!messageDisplay.get(position).isSend()) {
-                View newView = inflater.inflate(R.layout.leftmessage, parent, false);
-                TextView display = newView.findViewById(R.id.leftMessage);
-                display.setText(getItem(position));
-                return newView;
-            }
-            if (messageDisplay.get(position).isSend()) {
-                View newView = inflater.inflate(R.layout.rightmessage, parent, false);
-                TextView display = newView.findViewById(R.id.rightMessage);
-                display.setText(getItem(position));
-                return newView;
-            }
+                if (messageInfo.get(position).getSend()==1) {
+                    MessageInfo thisRow = getItem(position);
+                    View newView = inflater.inflate(R.layout.leftmessage, parent, false);
+                    TextView display = newView.findViewById(R.id.leftMessage);
+                    display.setText(thisRow.getMessage());
+                    return newView;
+                }
+                if (messageInfo.get(position).getSend()==0) {
+                    View newView = inflater.inflate(R.layout.rightmessage, parent, false);
+                    TextView display = newView.findViewById(R.id.rightMessage);
+                    display.setText(messageInfo.get(position).getMessage());
+                    return newView;
+                }
+
+
+
+
             return null;
         }
 
-
     }
-
-
-    public class Message {
-        private boolean sent;
-        private String message;
-
-        public Message(String message, boolean sent) {
-            this.message = message;
-            this.sent = sent;
-        }
-
-public String getMessage(){
-    return message;
-}
- public boolean sent(){
-            return sent;
- }
-
-
-    }
-
-
 }
