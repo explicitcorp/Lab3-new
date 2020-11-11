@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,7 +92,13 @@ public class MessageActivity extends AppCompatActivity {
             return true;
         });
     }
+    private void printCursor(Cursor c, int version){
+      int v =   db.getVersion();
 
+        Log.v("Version Number ", String.valueOf(db.getVersion()));
+        Log .v("Number of columns: ", String.valueOf(c.getColumnCount()));
+
+    }
     private void loadDataFromDatabase() {
         //get a database connection:
         MyOpener dbOpener = new MyOpener(this);
@@ -101,7 +108,7 @@ public class MessageActivity extends AppCompatActivity {
         String[] columns = {MyOpener.COL_ID, MyOpener.COL_MESSAGE, MyOpener.COL_SENT};
         //query all the results from the database:
         Cursor results = db.query(false, MyOpener.TABLE_NAME, columns, null, null, null, null, null, null);
-
+        printCursor(results,1);
         //Now the results object has rows of results that match the query.
         //find the column indices:
         int messageColumnIndex = results.getColumnIndex(MyOpener.COL_MESSAGE);
@@ -167,6 +174,9 @@ public class MessageActivity extends AppCompatActivity {
 
             return null;
         }
+
+
+
 
     }
 }
