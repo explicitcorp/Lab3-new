@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.TextView;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -21,10 +23,12 @@ public class WeatherForcast extends AppCompatActivity {
         setContentView(R.layout.activity_weather_forcast);
         ForecastQuery  req = new ForecastQuery ();
         req.execute("http://api.openweathermap.org/data/2.5/weather?q=ottawa,ca&APPID=7e943c97096a9784391a981c4d878b22&mode=xml&units=metric");
-    }
-}
 
- class ForecastQuery extends AsyncTask< String, Integer, String> {
+    }
+
+
+ private class ForecastQuery extends AsyncTask< String, Integer, String> {
+
     public String doInBackground(String ... args)
     {
         try {
@@ -37,7 +41,6 @@ public class WeatherForcast extends AppCompatActivity {
 
             //wait for data:
             InputStream response = urlConnection.getInputStream();
-
 
 
             //From part 3: slide 19
@@ -63,8 +66,16 @@ public class WeatherForcast extends AppCompatActivity {
                     {
                         //If you get here, then you are pointing to a <Weather> start tag
                         String tempValue = xpp.getAttributeValue(null,    "value");
+                        TextView tempSet = findViewById(R.id.currentTemp);
+                        tempSet.setText(tempValue);
                         String minTempValue = xpp.getAttributeValue(null, "min");
+                        TextView minSet = findViewById(R.id.minTemp);
+                        minSet.setText(minTempValue);
                         String maxTempValue = xpp.getAttributeValue(null, "max");
+                        TextView maxSet = findViewById(R.id.maxTemp);
+                        maxSet.setText(maxTempValue);
+
+
                     }
 
                     else if(xpp.getName().equals("AMessage"))
