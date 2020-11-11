@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class MessageActivity extends AppCompatActivity {
@@ -93,10 +94,24 @@ public class MessageActivity extends AppCompatActivity {
         });
     }
     private void printCursor(Cursor c, int version){
-      int v =   db.getVersion();
 
-        Log.v("Version Number ", String.valueOf(db.getVersion()));
-        Log .v("Number of columns: ", String.valueOf(c.getColumnCount()));
+        Log.v("#Version Number ", String.valueOf(db.getVersion()));
+        Log .v("#Number of columns ", String.valueOf(c.getColumnCount()));
+        Log.v("#Column Names ", Arrays.toString(c.getColumnNames()));
+        Log.v("#Number of rows ", String.valueOf(c.getCount()));
+        int messageColumnIndex = c.getColumnIndex(MyOpener.COL_MESSAGE);
+        int idColIndex = c.getColumnIndex(MyOpener.COL_ID);
+        int sentColIndex = c.getColumnIndex(MyOpener.COL_SENT);
+
+        while (c.moveToNext()) {
+            String message = c.getString(messageColumnIndex);
+            long id = c.getLong(idColIndex);
+            int sent = c.getInt(sentColIndex);
+            Log.v("#Message Value ", message);
+            Log.v("#ID Value ", String.valueOf(id));
+            Log.v("#Sent Value ", String.valueOf(sent));
+        }
+
 
     }
     private void loadDataFromDatabase() {
