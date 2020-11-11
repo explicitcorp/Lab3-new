@@ -93,27 +93,7 @@ public class MessageActivity extends AppCompatActivity {
             return true;
         });
     }
-    private void printCursor(Cursor c, int version){
 
-        Log.v("#Version Number ", String.valueOf(db.getVersion()));
-        Log .v("#Number of columns ", String.valueOf(c.getColumnCount()));
-        Log.v("#Column Names ", Arrays.toString(c.getColumnNames()));
-        Log.v("#Number of rows ", String.valueOf(c.getCount()));
-        int messageColumnIndex = c.getColumnIndex(MyOpener.COL_MESSAGE);
-        int idColIndex = c.getColumnIndex(MyOpener.COL_ID);
-        int sentColIndex = c.getColumnIndex(MyOpener.COL_SENT);
-
-        while (c.moveToNext()) {
-            String message = c.getString(messageColumnIndex);
-            long id = c.getLong(idColIndex);
-            int sent = c.getInt(sentColIndex);
-            Log.v("#Message Value ", message);
-            Log.v("#ID Value ", String.valueOf(id));
-            Log.v("#Sent Value ", String.valueOf(sent));
-        }
-
-
-    }
     private void loadDataFromDatabase() {
         //get a database connection:
         MyOpener dbOpener = new MyOpener(this);
@@ -123,7 +103,7 @@ public class MessageActivity extends AppCompatActivity {
         String[] columns = {MyOpener.COL_ID, MyOpener.COL_MESSAGE, MyOpener.COL_SENT};
         //query all the results from the database:
         Cursor results = db.query(false, MyOpener.TABLE_NAME, columns, null, null, null, null, null, null);
-        printCursor(results,1);
+
         //Now the results object has rows of results that match the query.
         //find the column indices:
         int messageColumnIndex = results.getColumnIndex(MyOpener.COL_MESSAGE);
@@ -138,8 +118,32 @@ public class MessageActivity extends AppCompatActivity {
             //add the new Contact to the array list:
             messageInfo.add(new MessageInfo(message, sent,id));
         }
-
+        printCursor(results,1);
         //At this point, the contactsList array has loaded every row from the cursor.
+    }
+    public void printCursor(Cursor c, int version){
+
+        Log.v("#Version Number ", String.valueOf(version));
+        Log .v("#Number of columns ", String.valueOf(c.getColumnCount()));
+        Log.v("#Column Names ", Arrays.toString(c.getColumnNames()));
+        Log.v("#Number of rows ", String.valueOf(c.getCount()));
+
+        int messColumnIndex = c.getColumnIndex(MyOpener.COL_MESSAGE);
+        int idColIndex = c.getColumnIndex(MyOpener.COL_ID);
+        int sentColIndex = c.getColumnIndex(MyOpener.COL_SENT);
+c.moveToFirst();
+        while(c.moveToNext()) {
+            String message = c.getString(messColumnIndex);
+            long idd = c.getLong(idColIndex);
+            int sentt = c.getInt(sentColIndex);
+            Log.v("#Message Value ", message);
+            Log.v("#ID Value ", String.valueOf(idd));
+            Log.v("#Sent Value ", String.valueOf(sentt));
+        }
+
+
+
+
     }
     protected void deleteMessage(MessageInfo c)
     {
