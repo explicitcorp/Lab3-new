@@ -23,10 +23,17 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         mImageButton = findViewById(R.id.takePhoto);
         Button messageButton = findViewById(R.id.Messages);
+        Button weatherButton = findViewById(R.id.Weather);
         Intent nextPage = new Intent(this, MessageActivity.class);
+        Intent weatherPage = new Intent(this, WeatherForcast.class);
         messageButton.setOnClickListener(v -> {
 
             startActivity(nextPage);
+
+        });
+        weatherButton.setOnClickListener(v -> {
+
+            startActivity(weatherPage);
 
         });
         mImageButton.setOnClickListener(tp -> dispatchTakePictureIntent() );
