@@ -94,8 +94,6 @@ public class WeatherForcast extends AppCompatActivity {
                         //If you get here, then you are pointing to a <Weather> start tag
                        curTemp= xpp.getAttributeValue(null,    "value");
                         publishProgress(25);
-                        publishProgress(50);
-                        publishProgress(75);
                         minTemp = xpp.getAttributeValue(null, "min");
                         publishProgress(50);
                          maxTemp = xpp.getAttributeValue(null, "max");
