@@ -2,10 +2,14 @@ package com.example.lab3_1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONObject;
@@ -13,6 +17,10 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -33,13 +41,15 @@ public class WeatherForcast extends AppCompatActivity {
 
 
  private class ForecastQuery extends AsyncTask< String, Integer, String> {
-
+        ImageView iconImage;
+     Bitmap image = null;
      TextView tempSet;
      TextView minSet;
      TextView maxSet;
      TextView uvSet;
      double uvRating;
-     String maxTemp, minTemp, curTemp;
+     String maxTemp, minTemp, curTemp, iconId;
+     HttpURLConnection connection;
 
     public String doInBackground(String ... args)
     {
@@ -78,10 +88,34 @@ public class WeatherForcast extends AppCompatActivity {
                     {
                         //If you get here, then you are pointing to a <Weather> start tag
                        curTemp= xpp.getAttributeValue(null,    "value");
-
-                         minTemp = xpp.getAttributeValue(null, "min");
-
+                        publishProgress(25);
+                        minTemp = xpp.getAttributeValue(null, "min");
+                        publishProgress(50);
                          maxTemp = xpp.getAttributeValue(null, "max");
+                        publishProgress(75);
+
+
+                    }
+else if(xpp.getName().equals("weather")){
+
+    iconId = xpp.getAttributeValue(null, "icon");
+
+                        URL url1 = new URL("http://openweathermap.org/img/w/" + iconId + ".png");
+                        connection = (HttpURLConnection) url1.openConnection();
+                        connection.connect();
+                        int responseCode = connection.getResponseCode();
+                        if (responseCode == 200) {
+                            image = BitmapFactory.decodeStream(connection.getInputStream());
+                        }
+                        publishProgress(100);
+                        FileOutputStream outputStream = openFileOutput( iconId + ".png", Context.MODE_PRIVATE);
+                        image.compress(Bitmap.CompressFormat.PNG, 80, outputStream);
+                        outputStream.flush();
+                        outputStream.close();
+                        FileInputStream fis = null;
+                        try {    fis = openFileInput(iconId+".png");   }
+                        catch (FileNotFoundException e) {    e.printStackTrace();  }
+                        Bitmap bm = BitmapFactory.decodeStream(fis);
 
 
 
@@ -125,7 +159,9 @@ public class WeatherForcast extends AppCompatActivity {
 
         return "Done";
     }
-
+     public boolean fileExistance(String fname){
+         File file = getBaseContext().getFileStreamPath(fname);
+         return file.exists();   }
     //Type 2
     public void onProgressUpdate(Integer ... args)
     {
@@ -142,6 +178,8 @@ public class WeatherForcast extends AppCompatActivity {
         uvSet = findViewById(R.id.UV);
       String  uvR=String.valueOf( uvRating);
         uvSet.setText("UV: " +uvR+" ");
+        iconImage = findViewById(R.id.currentWeatherImage);
+        iconImage.setImageBitmap(image);
 
 
         Log.i("HTTP", fromDoInBackground);
