@@ -1,15 +1,19 @@
 package com.example.lab3_1;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.json.JSONObject;
@@ -50,6 +54,7 @@ public class WeatherForcast extends AppCompatActivity {
      double uvRating;
      String maxTemp, minTemp, curTemp, iconId;
      HttpURLConnection connection;
+     ProgressBar progressB ;
 
     public String doInBackground(String ... args)
     {
@@ -89,12 +94,16 @@ public class WeatherForcast extends AppCompatActivity {
                         //If you get here, then you are pointing to a <Weather> start tag
                        curTemp= xpp.getAttributeValue(null,    "value");
                         publishProgress(25);
-                        minTemp = xpp.getAttributeValue(null, "min");
                         publishProgress(50);
-                         maxTemp = xpp.getAttributeValue(null, "max");
                         publishProgress(75);
-
-
+                        minTemp = xpp.getAttributeValue(null, "min");
+                        publishProgress(25);
+                        publishProgress(50);
+                        publishProgress(75);
+                         maxTemp = xpp.getAttributeValue(null, "max");
+                        publishProgress(25);
+                        publishProgress(50);
+                        publishProgress(75);
                     }
 else if(xpp.getName().equals("weather")){
 
@@ -163,13 +172,17 @@ else if(xpp.getName().equals("weather")){
          File file = getBaseContext().getFileStreamPath(fname);
          return file.exists();   }
     //Type 2
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void onProgressUpdate(Integer ... args)
     {
-
+        progressB = findViewById(R.id.progressBar);
+       progressB.setVisibility(View.VISIBLE);
+       progressB.setProgress(args[0]);
     }
     //Type3
     public void onPostExecute(String fromDoInBackground)
     {     tempSet = findViewById(R.id.currentTemp);
+
         tempSet.setText("Current Temp: "+ curTemp+" ");
         minSet = findViewById(R.id.minTemp);
         minSet.setText("Min: "+minTemp+" ");
