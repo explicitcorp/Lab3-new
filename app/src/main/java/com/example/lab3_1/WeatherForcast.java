@@ -97,12 +97,8 @@ public class WeatherForcast extends AppCompatActivity {
                         publishProgress(50);
                         publishProgress(75);
                         minTemp = xpp.getAttributeValue(null, "min");
-                        publishProgress(25);
                         publishProgress(50);
-                        publishProgress(75);
                          maxTemp = xpp.getAttributeValue(null, "max");
-                        publishProgress(25);
-                        publishProgress(50);
                         publishProgress(75);
                     }
 else if(xpp.getName().equals("weather")){
@@ -193,6 +189,7 @@ else if(xpp.getName().equals("weather")){
         uvSet.setText("UV: " +uvR+" ");
         iconImage = findViewById(R.id.currentWeatherImage);
         iconImage.setImageBitmap(image);
+        progressB.setVisibility(View.INVISIBLE );
 
 
         Log.i("HTTP", fromDoInBackground);
