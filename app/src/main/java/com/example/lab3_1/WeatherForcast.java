@@ -119,8 +119,12 @@ else if(xpp.getName().equals("weather")){
                         try {    fis = openFileInput(iconId+".png");   }
                         catch (FileNotFoundException e) {    e.printStackTrace();  }
                         Bitmap bm = BitmapFactory.decodeStream(fis);
-
-
+                        if (iconId==null) {
+                            Log.i(iconId + ".png", "Requires Download");
+                        }
+                        else{
+                            Log.i(iconId + ".png", "Found Locally");
+                        }
 
                     }
 
