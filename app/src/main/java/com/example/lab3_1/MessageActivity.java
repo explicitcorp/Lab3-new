@@ -46,9 +46,8 @@ public class MessageActivity extends AppCompatActivity {
 
         Button sButton = findViewById(R.id.sendButton);
         Button rButton = findViewById(R.id.receiveButton);
-        boolean isTablet = findViewById(R.id.fragmentLocation) != null;
         loadDataFromDatabase();
-
+        boolean isTablet = findViewById(R.id.fragmentLocation) != null;
         sButton.setOnClickListener(click -> {
             enteredText = findViewById(R.id.editTextMessage);
             displayText = enteredText.getText().toString();
@@ -93,6 +92,7 @@ public class MessageActivity extends AppCompatActivity {
             alertDialog.show();
             return true;
         });
+
         myList.setOnItemClickListener((list,view,position,id)->{
             if(isTablet)
         {

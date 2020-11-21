@@ -9,7 +9,7 @@ public class EmptyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_empty2);
+        setContentView(R.layout.fragment_detail);
         DetailFragment dFragment = new DetailFragment(); //add a DetailFragment
         getSupportFragmentManager()
                 .beginTransaction()
