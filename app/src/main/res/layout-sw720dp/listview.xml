@@ -6,23 +6,24 @@
     android:layout_height="match_parent"
     android:padding="6dip">
 
-    <RelativeLayout
-        android:id="@+id/rl1"
-        android:layout_width="300dp"
-        android:layout_height="match_parent"
-        app:layout_constraintRight_toLeftOf="@id/fl"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-    />
-
     <FrameLayout
         android:id="@+id/fl"
-        android:layout_width="970dp"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/rl1"
+        app:layout_constraintStart_toEndOf="@id/listViewLayout"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/listViewLayout"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        app:layout_constraintLeft_toRightOf="@id/listViewLayout"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </ListView>
+
 
     <Button
         android:id="@+id/sendButton"
@@ -40,18 +41,7 @@
         android:layout_height="39dp"
         android:text="@string/receive"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="@id/rl1" />
-
-
-    <ListView
-        android:id="@+id/listViewLayout"
-        android:layout_width="300dp"
-        android:layout_height="match_parent"
-        app:layout_constraintEnd_toEndOf="@id/rl1"
-
-        app:layout_constraintTop_toTopOf="parent">
-
-    </ListView>
+        app:layout_constraintRight_toRightOf="@id/listViewLayout" />
 
 
     <EditText
@@ -63,7 +53,8 @@
         android:hint="@string/type_here"
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/receiveButton"
-        app:layout_constraintLeft_toRightOf="@+id/sendButton" />
+        app:layout_constraintLeft_toRightOf="@+id/sendButton"
+        app:layout_constraintRight_toLeftOf="@+id/receiveButton" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
