@@ -4,6 +4,7 @@ package com.example.lab3_1;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -45,7 +46,7 @@ public class MessageActivity extends AppCompatActivity {
 
         Button sButton = findViewById(R.id.sendButton);
         Button rButton = findViewById(R.id.receiveButton);
-
+        boolean isTablet = findViewById(R.id.fragmentLocation) != null;
         loadDataFromDatabase();
 
         sButton.setOnClickListener(click -> {
@@ -91,6 +92,22 @@ public class MessageActivity extends AppCompatActivity {
             alertDialog.create();
             alertDialog.show();
             return true;
+        });
+        myList.setOnItemClickListener((list,view,position,id)->{
+            if(isTablet)
+        {
+            DetailFragment dFragment = new DetailFragment(); //add a DetailFragment
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentLocation, dFragment) //Add the fragment in FrameLayout
+                    .commit(); //actually load the fragment. Calls onCreate() in DetailFragment
+        }
+        else //isPhone
+        {
+            Intent nextActivity = new Intent(this, EmptyActivity.class);
+            startActivity(nextActivity); //make the transition
+        }
+
         });
     }
 
