@@ -1,7 +1,9 @@
 package com.example.lab3_1;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 public class DetailFragment extends Fragment {
     String messageImport;
     private Bundle dataPass;
+    private AppCompatActivity parentActivity;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -27,15 +30,26 @@ public class DetailFragment extends Fragment {
         CheckBox chBox = myView.findViewById(R.id.checkBox2);
         TextView message = (TextView)myView.findViewById(R.id.message);
         TextView idText = (TextView)myView.findViewById(R.id.idText);
-        Button hideButton = myView.findViewById(R.id.finishButton);
+        Button hideButton = (Button)myView.findViewById(R.id.finishButton);
 
 
 message.setText(messageImport);
 idText.setText(idImport);
 chBox.setChecked(sentImport);
+        hideButton.setOnClickListener( clk -> {
 
+            //Tell the parent activity to remove
+            parentActivity.getSupportFragmentManager().beginTransaction().remove(this).commit();
+        });
 
         return myView;
 
+    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        //context will either be FragmentExample for a tablet, or EmptyActivity for phone
+        parentActivity = (AppCompatActivity)context;
     }
 }
