@@ -33,10 +33,15 @@ public class MessageActivity extends AppCompatActivity {
     public String displayText;
     myListAdapter myListAdapter = new myListAdapter();
     EditText enteredText;
+    String mess;
     ArrayList<MessageInfo> messageInfo = new ArrayList<>();
     ContentValues newRowValues = new ContentValues();
     SQLiteDatabase db;
-
+public static final String MESSAGE = "MESSAGE";
+    public static final String ID = "ID";
+    public static final String SENT = "SENT";
+    long newId;
+    boolean sent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,16 +52,20 @@ public class MessageActivity extends AppCompatActivity {
         Button sButton = findViewById(R.id.sendButton);
         Button rButton = findViewById(R.id.receiveButton);
         loadDataFromDatabase();
-        boolean isTablet = findViewById(R.id.fragmentLocation) != null;
+
+
+        boolean isTablet = findViewById(R.id.fl) != null;
         sButton.setOnClickListener(click -> {
             enteredText = findViewById(R.id.editTextMessage);
             displayText = enteredText.getText().toString();
+
             MessageInfo info = new MessageInfo(displayText,1);
             messageInfo.add(info);
             myListAdapter.notifyDataSetChanged();
             newRowValues.put(MyOpener.COL_MESSAGE, displayText);
             newRowValues.put(MyOpener.COL_SENT, 1);
-            long newId = db.insert(MyOpener.TABLE_NAME, null, newRowValues);
+            newId = db.insert(MyOpener.TABLE_NAME, null, newRowValues);
+            sent = true;
             enteredText.getText().clear();
 
 
@@ -69,7 +78,8 @@ public class MessageActivity extends AppCompatActivity {
             myListAdapter.notifyDataSetChanged();
             newRowValues.put(MyOpener.COL_MESSAGE, displayText);
             newRowValues.put(MyOpener.COL_SENT, 0);
-            long newId = db.insert(MyOpener.TABLE_NAME, null, newRowValues);
+            newId = db.insert(MyOpener.TABLE_NAME, null, newRowValues);
+            sent = false;
             enteredText.getText().clear();
 
         });
@@ -94,23 +104,41 @@ public class MessageActivity extends AppCompatActivity {
         });
 
         myList.setOnItemClickListener((list,view,position,id)->{
+            Bundle dataToPass = new Bundle();
+            dataToPass.putString(MESSAGE, messageInfo.get(position).getMessage());
+            dataToPass.putString(ID, "ID = " + String.valueOf(position));
+            if (messageInfo.get(position).getSend()==0){
+            dataToPass.putBoolean(SENT, false);}
+            else{
+                dataToPass.putBoolean(SENT, true);
+            }
             if(isTablet)
         {
             DetailFragment dFragment = new DetailFragment(); //add a DetailFragment
+            dFragment.setArguments( dataToPass );
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragmentLocation, dFragment) //Add the fragment in FrameLayout
+                    .replace(R.id.fl, dFragment) //Add the fragment in FrameLayout
                     .commit(); //actually load the fragment. Calls onCreate() in DetailFragment
+
+
         }
         else //isPhone
         {
             Intent nextActivity = new Intent(this, EmptyActivity.class);
+            nextActivity.putExtras(dataToPass);
             startActivity(nextActivity); //make the transition
         }
 
         });
     }
+private boolean isItSent(){
+        int getSent = Integer.parseInt(MyOpener.COL_SENT);
+        Boolean sent ;
 
+
+        return true;
+}
     private void loadDataFromDatabase() {
         //get a database connection:
         MyOpener dbOpener = new MyOpener(this);
@@ -128,7 +156,7 @@ public class MessageActivity extends AppCompatActivity {
         int sentColIndex = results.getColumnIndex(MyOpener.COL_SENT);
         //iterate over the results, return true if there is a next item:
         while (results.moveToNext()) {
-            String message = results.getString(messageColumnIndex);
+         String message = results.getString(messageColumnIndex);
             long id = results.getLong(idColIndex);
             int sent = results.getInt(sentColIndex);
 
